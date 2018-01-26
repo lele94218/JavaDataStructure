@@ -1,6 +1,4 @@
-package com.terryx.datastructure;
-
-import java.util.*;
+package com.terryx.datastructure.myblockingqueue;
 
 /**
  * @author taoranxue on 1/25/18 7:47 PM.
