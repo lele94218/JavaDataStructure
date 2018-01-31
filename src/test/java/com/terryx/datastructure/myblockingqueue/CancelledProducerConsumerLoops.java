@@ -4,6 +4,16 @@ package com.terryx.datastructure.myblockingqueue;
  * @author taoranxue on 1/25/18 7:47 PM.
  */
 
+/*
+ * @test
+ * @bug 4486658
+ * @compile -source 1.5 CancelledProducerConsumerLoops.java
+ * @run main/timeout=7000 CancelledProducerConsumerLoops
+ * @summary Checks for responsiveness of blocking queues to cancellation.
+ * Runs under the assumption that ITERS computations require more than
+ * TIMEOUT msecs to complete.
+ */
+
 import java.util.concurrent.*;
 
 public class CancelledProducerConsumerLoops {
@@ -82,15 +92,7 @@ public class CancelledProducerConsumerLoops {
 
     static void oneTest(int pairs, int iters) throws Exception {
 
-        oneRun(new ArrayBlockingQueue<Integer>(CAPACITY), pairs, iters);
-        oneRun(new LinkedBlockingQueue<Integer>(CAPACITY), pairs, iters);
-        oneRun(new LinkedBlockingDeque<Integer>(CAPACITY), pairs, iters);
-        oneRun(new SynchronousQueue<Integer>(), pairs, iters / 8);
-
-        /* unbounded queue implementations are prone to OOME
-        oneRun(new PriorityBlockingQueue<Integer>(iters / 2 * pairs), pairs, iters / 4);
-        oneRun(new LinkedTransferQueue<Integer>(), pairs, iters);
-        */
+        oneRun(new MyBlockingQueue<Integer>(CAPACITY), pairs, iters);
     }
 
     abstract static class Stage implements Callable<Integer> {

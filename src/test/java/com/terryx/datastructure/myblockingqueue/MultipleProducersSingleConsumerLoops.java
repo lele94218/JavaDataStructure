@@ -35,7 +35,7 @@ public class MultipleProducersSingleConsumerLoops {
     }
 
     public static void main(String[] args) throws Exception {
-        int maxProducers = 5;
+        int maxProducers = 50;
         int iters = 100000;
 
         if (args.length > 0)
@@ -61,21 +61,7 @@ public class MultipleProducersSingleConsumerLoops {
     }
 
     static void oneTest(int producers, int iters) throws Exception {
-        oneRun(new ArrayBlockingQueue<Integer>(CAPACITY), producers, iters);
-        oneRun(new LinkedBlockingQueue<Integer>(CAPACITY), producers, iters);
-        oneRun(new LinkedBlockingDeque<Integer>(CAPACITY), producers, iters);
-        oneRun(new LinkedTransferQueue<Integer>(), producers, iters);
-
-        // Don't run PBQ since can legitimately run out of memory
-        //        if (print)
-        //            System.out.print("PriorityBlockingQueue   ");
-        //        oneRun(new PriorityBlockingQueue<Integer>(), producers, iters);
-
-        oneRun(new SynchronousQueue<Integer>(), producers, iters);
-        if (print)
-            System.out.println("fair implementations:");
-        oneRun(new SynchronousQueue<Integer>(true), producers, iters);
-        oneRun(new ArrayBlockingQueue<Integer>(CAPACITY, true), producers, iters);
+        oneRun(new MyBlockingQueue<Integer>(CAPACITY), producers, iters);
     }
 
     abstract static class Stage implements Runnable {

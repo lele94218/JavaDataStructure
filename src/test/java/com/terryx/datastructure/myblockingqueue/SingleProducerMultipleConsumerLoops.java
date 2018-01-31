@@ -47,16 +47,7 @@ public class SingleProducerMultipleConsumerLoops {
     }
 
     static void oneTest(int consumers, int iters) throws Exception {
-        oneRun(new ArrayBlockingQueue<Integer>(CAPACITY), consumers, iters);
-        oneRun(new LinkedBlockingQueue<Integer>(CAPACITY), consumers, iters);
-        oneRun(new LinkedBlockingDeque<Integer>(CAPACITY), consumers, iters);
-        oneRun(new LinkedTransferQueue<Integer>(), consumers, iters);
-        oneRun(new PriorityBlockingQueue<Integer>(), consumers, iters);
-        oneRun(new SynchronousQueue<Integer>(), consumers, iters);
-        if (print)
-            System.out.println("fair implementations:");
-        oneRun(new SynchronousQueue<Integer>(true), consumers, iters);
-        oneRun(new ArrayBlockingQueue<Integer>(CAPACITY, true), consumers, iters);
+        oneRun(new MyBlockingQueue<Integer>(CAPACITY), consumers, iters);
     }
 
     abstract static class Stage implements Runnable {
