@@ -74,5 +74,7 @@ public class PriorityQueueSort {
 //
 //        if (!recons.equals(sorted))
 //            throw new RuntimeException("Iterator remove test failed.");
+
+        System.out.println("All tests Passed!");
     }
 }
