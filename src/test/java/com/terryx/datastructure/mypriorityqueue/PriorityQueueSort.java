@@ -59,21 +59,20 @@ public class PriorityQueueSort {
             throw new RuntimeException("Sort test failed");
 
         // Remove all odd elements from queue
-//        pq = new MyPriorityQueue<Integer>(shuffled);
-//        System.out.println(pq);
-//        for (Iterator<Integer> i = pq.iterator(); i.hasNext(); )
-//            if ((i.next().intValue() & 1) == 1)
-//                i.remove();
-//        recons.clear();
-//        while (!pq.isEmpty())
-//            recons.add(pq.remove());
-//
-//        for (Iterator<Integer> i = sorted.iterator(); i.hasNext(); )
-//            if ((i.next().intValue() & 1) == 1)
-//                i.remove();
-//
-//        if (!recons.equals(sorted))
-//            throw new RuntimeException("Iterator remove test failed.");
+        pq = new MyPriorityQueue<Integer>(shuffled);
+        for (Iterator<Integer> i = pq.iterator(); i.hasNext(); )
+            if ((i.next().intValue() & 1) == 1)
+                i.remove();
+        recons.clear();
+        while (!pq.isEmpty())
+            recons.add(pq.remove());
+
+        for (Iterator<Integer> i = sorted.iterator(); i.hasNext(); )
+            if ((i.next().intValue() & 1) == 1)
+                i.remove();
+
+        if (!recons.equals(sorted))
+            throw new RuntimeException("Iterator remove test failed.");
 
         System.out.println("All tests Passed!");
     }

@@ -272,21 +272,93 @@ public class MyPriorityQueue<E> implements Queue<E> {
     }
 
     /**
-     * Simple iterator for test
+     * Version of remove using reference equality, not equals.
+     * Needed by iterator.remove.
+     *
+     * @param o element to be removed from this queue, if present
+     * @return {@code true} if removed
      */
+    private boolean removeEq(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o == queue[i]) {
+                removeAt(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private class Itr implements Iterator<E> {
+        /**
+         * Index (into queue array) of element to be returned by
+         * subsequent call to next.
+         */
         private int cursor = 0;
+
+        /**
+         * Index of element returned by most recent call to next,
+         * unless that element came from the forgetMeNot list.
+         * Set to -1 if element is deleted by a call to remove.
+         */
+        private int lastRet = -1;
+
+        /**
+         * A queue of elements that were moved from the unvisited portion of
+         * the heap into the visited portion as a result of "unlucky" element
+         * removals during the iteration.  (Unlucky element removals are those
+         * that require a siftup instead of a siftdown.)  We must visit all of
+         * the elements in this list to complete the iteration.  We do this
+         * after we've completed the "normal" iteration.
+         *
+         * We expect that most iterations, even those involving removals,
+         * will not need to store elements in this field.
+         */
+        private ArrayDeque<E> forgetMeNot = null;
+
+        /**
+         * Element returned by the most recent call to next iff that
+         * element was drawn from the forgetMeNot list.
+         */
+        private E lastRetElt = null;
 
         @Override
         public boolean hasNext() {
-            return cursor < size;
+            return cursor < size || (forgetMeNot != null && !forgetMeNot.isEmpty());
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public E next() {
-            return (E) queue[cursor++];
+            if (cursor < size) {
+                return (E) queue[lastRet = cursor++];
+            }
+
+            if (forgetMeNot != null) {
+                lastRet = -1;
+                lastRetElt = forgetMeNot.poll();
+            }
+            return lastRetElt;
         }
 
+
+        public void remove() {
+            if (lastRet != -1) {
+                E moved = MyPriorityQueue.this.removeAt(lastRet);
+                lastRet = -1;
+                if (moved == null) {
+                    cursor--;
+                } else {
+                    if (forgetMeNot == null) {
+                        forgetMeNot = new ArrayDeque<>();
+                    }
+                    forgetMeNot.offer(moved);
+                }
+            } else if (lastRetElt != null) {
+                MyPriorityQueue.this.removeEq(lastRetElt);
+                lastRetElt = null;
+            }
+        }
     }
 
     /**
