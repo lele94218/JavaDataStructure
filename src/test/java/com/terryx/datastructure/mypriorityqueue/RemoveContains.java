@@ -51,13 +51,7 @@ public class RemoveContains {
             }
         };
 
-        test(new PriorityQueue<String>(10, firstChar));
-        test(new PriorityBlockingQueue<String>(10, firstChar));
-        test(new ArrayBlockingQueue<String>(10));
-        test(new LinkedBlockingQueue<String>(10));
-        test(new LinkedBlockingDeque<String>(10));
-        test(new LinkedTransferQueue<String>());
-        test(new ArrayDeque<String>(10));
+        test(new MyPriorityQueue<String>(10, firstChar));
 
         System.out.printf("%nPassed = %d, failed = %d%n%n", passed, failed);
         if (failed > 0) throw new Error("Some tests failed");
@@ -72,7 +66,6 @@ public class RemoveContains {
             for (String word : words)
                 check(q.contains(word));
             check(!q.contains("flurble"));
-
             check(q.remove("fi"));
             for (String word : words)
                 check(q.contains(word) ^ word.equals("fi"));

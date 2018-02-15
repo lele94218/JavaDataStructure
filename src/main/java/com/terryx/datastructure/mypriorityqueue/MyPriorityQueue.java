@@ -6,6 +6,8 @@ import java.util.*;
  * @author taoranxue on 2/7/18 9:37 PM.
  */
 public class MyPriorityQueue<E> implements Queue<E> {
+
+    private static final int DEFAULT_INITIAL_CAPACITY = 11;
     /**
      * Priority queue represented as a balanced binary heap: the two
      * children of queue[n] are queue[2*n+1] and queue[2*(n+1)].  Ehe
@@ -26,6 +28,16 @@ public class MyPriorityQueue<E> implements Queue<E> {
      * natural ordering.
      */
     private final Comparator<? super E> comparator;
+
+
+    /**
+     * Creates a {@code PriorityQueue} with the default initial
+     * capacity (11) that orders its elements according to their
+     * {@linkplain Comparable natural ordering}.
+     */
+    public MyPriorityQueue() {
+        this(DEFAULT_INITIAL_CAPACITY, null);
+    }
 
 
     /**
@@ -173,6 +185,20 @@ public class MyPriorityQueue<E> implements Queue<E> {
             siftDown(0, x);
         }
         return res;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return indexOf(o) != -1;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean modified = false;
+        for (E e : c)
+            if (add(e))
+                modified = true;
+        return modified;
     }
 
     /**
@@ -387,17 +413,28 @@ public class MyPriorityQueue<E> implements Queue<E> {
         }
     }
 
+    private int indexOf(Object o) {
+        if (o != null) {
+            for (int i = 0; i < size; i++)
+                if (o.equals(queue[i]))
+                    return i;
+        }
+        return -1;
+    }
+
     // --- not implements --
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        int i = indexOf(o);
+        if (i == -1)
+            return false;
+        else {
+            removeAt(i);
+            return true;
+        }
     }
 
-    @Override
-    public boolean contains(Object o) {
-        return false;
-    }
 
     @Override
     public Object[] toArray() {
@@ -412,11 +449,6 @@ public class MyPriorityQueue<E> implements Queue<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
         return false;
     }
 
